@@ -69,7 +69,7 @@
               <form method="post" action="admin_change_stock.php">
                 <div class="form-group">
                   <!-- sqlインジェクション確認のためあえてtext -->
-                  <input  type="text" name="stock" value="<?php print(h($item['stock']); ?>">
+                  <input  type="text" name="stock" value="<?php print(h($item['stock'])); ?>">
                   個
                 </div>
                 <input type="submit" value="変更" class="btn btn-secondary">
