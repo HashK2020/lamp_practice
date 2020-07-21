@@ -16,6 +16,12 @@ $user = get_login_user($db);
 
 $cart_id = get_post('cart_id');
 
+/*トークンの内容が不一致なら*/
+if(is_valid_csrf_token($_POST['token']) === false){
+  set_error('csrfを検出しました。');
+  redirect_to(CART_URL);
+}
+
 if(delete_cart($db, $cart_id)){
   set_message('カートを削除しました。');
 } else {

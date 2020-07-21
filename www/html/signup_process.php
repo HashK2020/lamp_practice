@@ -15,6 +15,12 @@ $password_confirmation = get_post('password_confirmation');
 
 $db = get_db_connect();
 
+/*トークンの内容が不一致なら*/
+if(is_valid_csrf_token($_POST['token']) === false){
+  set_error('csrfを検出しました。');
+  redirect_to(SIGNUP_URL);
+}
+
 try{
   $result = regist_user($db, $name, $password, $password_confirmation);
   if( $result=== false){
