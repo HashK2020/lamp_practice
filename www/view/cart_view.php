@@ -3,7 +3,7 @@
 <head>
   <?php include VIEW_PATH . 'templates/head.php'; ?>
   <title>カート</title>
-  <link rel="stylesheet" href="<?php print(h(STYLESHEET_PATH . 'cart.css')); ?>">
+  <link rel="stylesheet" href="<?php print(STYLESHEET_PATH . 'cart.css'); ?>">
 </head>
 <body>
   <?php include VIEW_PATH . 'templates/header_logined.php'; ?>
@@ -35,7 +35,7 @@
                 <input type="number" name="amount" value="<?php print(h($cart['amount'])); ?>">
                 個
                 <input type="submit" value="変更" class="btn btn-secondary">
-                <input type="hidden" name="cart_id" value="<?php print(h($cart['cart_id'])); ?>">
+                <input type="hidden" name="cart_id" value="<?php print($cart['cart_id']); ?>">
               </form>
             </td>
             <td><?php print(h(number_format($cart['price'] * $cart['amount']))); ?>円</td>
@@ -43,7 +43,7 @@
 
               <form method="post" action="cart_delete_cart.php">
                 <input type="submit" value="削除" class="btn btn-danger delete">
-                <input type="hidden" name="cart_id" value="<?php print(h($cart['cart_id'])); ?>">
+                <input type="hidden" name="cart_id" value="<?php print($cart['cart_id']); ?>">
               </form>
 
             </td>
