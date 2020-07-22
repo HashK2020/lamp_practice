@@ -185,3 +185,8 @@ function is_valid_csrf_token($token){
   }
   return $token === get_session('csrf_token');
 }
+
+//パスワードをハッシュ化させる
+function get_hashed_string($password){
+  return password_hash($password,PASSWORD_DEFAULT);
+}
