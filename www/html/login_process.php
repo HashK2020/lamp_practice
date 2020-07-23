@@ -14,6 +14,11 @@ $password = get_post('password');
 
 $db = get_db_connect();
 
+/*トークンの内容が不一致なら*/
+if(is_valid_csrf_token($_POST['token']) === false){
+  set_error('csrfを検出しました。');
+  redirect_to(LOGIN_URL);
+}
 
 $user = login_as($db, $name, $password);
 if( $user === false){

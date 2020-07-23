@@ -10,6 +10,7 @@ if(is_logined() === false){
   redirect_to(LOGIN_URL);
 }
 
+
 $db = get_db_connect();
 
 $user = get_login_user($db);
@@ -24,6 +25,13 @@ $status = get_post('status');
 $stock = get_post('stock');
 
 $image = get_file('image');
+
+/*トークンの内容が不一致なら*/
+if(is_valid_csrf_token($_POST['token']) === false){
+  set_error('csrfを検出しました。');
+  redirect_to(ADMIN_URL);
+}
+
 
 if(regist_item($db, $name, $price, $stock, $status, $image)){
   set_message('商品を登録しました。');

@@ -21,6 +21,13 @@ if(is_admin($user) === false){
 $item_id = get_post('item_id');
 $stock = get_post('stock');
 
+/*トークンの内容が不一致なら*/
+if(is_valid_csrf_token($_POST['token']) === false){
+  set_error('csrfを検出しました。');
+  redirect_to(ADMIN_URL);
+}
+
+
 if(update_item_stock($db, $item_id, $stock)){
   set_message('在庫数を変更しました。');
 } else {
