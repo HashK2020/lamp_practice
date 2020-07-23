@@ -23,6 +23,7 @@ if(is_valid_csrf_token($_POST['token']) === false){
 $user = login_as($db, $name, $password);
 if( $user === false){
   set_error('ログインに失敗しました。');
+  //set_error(var_dump($user));
   redirect_to(LOGIN_URL);
 }
 
