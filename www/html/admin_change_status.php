@@ -24,7 +24,7 @@ $changes_to = get_post('changes_to');
 /*トークンの内容が不一致なら*/
 if(is_valid_csrf_token($_POST['token']) === false){
   set_error('csrfを検出しました。');
-  redirect_to(LOGIN_URL);
+  redirect_to(ADMIN_URL);
 }
 
 if($changes_to === 'open'){

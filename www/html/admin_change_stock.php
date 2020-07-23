@@ -24,7 +24,7 @@ $stock = get_post('stock');
 /*トークンの内容が不一致なら*/
 if(is_valid_csrf_token($_POST['token']) === false){
   set_error('csrfを検出しました。');
-  redirect_to(LOGIN_URL);
+  redirect_to(ADMIN_URL);
 }
 
 
