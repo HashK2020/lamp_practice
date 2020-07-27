@@ -48,6 +48,7 @@ CREATE TABLE `purchase_history` (
   `total_price` int(11) NOT NULL COMMENT '合計金額'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
 --
 -- ダンプしたテーブルのインデックス
 --
