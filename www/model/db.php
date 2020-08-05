@@ -39,14 +39,10 @@ function fetch_all_query($db, $sql, $params = array()){
 }
 
 function execute_query($db, $sql, $params = array()){
-  $db->beginTransaction();
   try{
     $statement = $db->prepare($sql);
-    $statement->execute($params);
-    $db->commit();
-    return true;
+    return $statement->execute($params);
   }catch(PDOException $e){
-    $db->rollback();
     set_error('更新に失敗しました。');
   }
   return false;

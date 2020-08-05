@@ -107,6 +107,7 @@ function purchase_carts($db, $carts, $user_id, $total_price){
   if(validate_cart_purchase($carts) === false){
     return false;
   }
+  $db->beginTransaction();
   foreach($carts as $cart){
     if(update_item_stock(
         $db, 
@@ -114,6 +115,9 @@ function purchase_carts($db, $carts, $user_id, $total_price){
         $cart['stock'] - $cart['amount']
       ) === false){
       set_error($cart['name'] . 'の購入に失敗しました。');
+      $db->rollback();
+
+      return false;
     }
   }
   //購入履歴の保存
@@ -123,6 +127,9 @@ function purchase_carts($db, $carts, $user_id, $total_price){
       $total_price
     ) === false){
     set_error('購入履歴の保存に失敗しました。');
+    $db->rollback();
+
+    return false;
   }
   //先程insertした購入履歴の、主キーの値を取得
   $history_id = get_last_insert_id($db);
@@ -130,10 +137,16 @@ function purchase_carts($db, $carts, $user_id, $total_price){
   foreach($carts as $cart){
     if(insert_purchase_detail($db,$history_id,$cart['price'],$cart['amount'],$cart['item_id']) === false){
       set_error('購入詳細の保存に失敗しました。');
+      $db->rollback();
+      
+      return false;
     }
   }
 
   delete_user_carts($db, $carts[0]['user_id']);
+  $db->commit();
+
+  return true;
 }
 
 function delete_user_carts($db, $user_id){
