@@ -138,13 +138,18 @@ function purchase_carts($db, $carts, $user_id, $total_price){
     if(insert_purchase_detail($db,$history_id,$cart['price'],$cart['amount'],$cart['item_id']) === false){
       set_error('購入詳細の保存に失敗しました。');
       $db->rollback();
-      
+
       return false;
     }
   }
 
   delete_user_carts($db, $carts[0]['user_id']);
-  $db->commit();
+
+  if(has_error()){
+    $db->commit();
+  }else{
+    $db->rollback();
+  }
 
   return true;
 }
