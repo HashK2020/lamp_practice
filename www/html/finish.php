@@ -5,6 +5,7 @@ require_once MODEL_PATH . 'user.php';
 require_once MODEL_PATH . 'item.php';
 require_once MODEL_PATH . 'cart.php';
 
+
 session_start();
 
 if(is_logined() === false){
@@ -22,10 +23,13 @@ if(is_valid_csrf_token($_POST['token']) === false){
   redirect_to(CART_URL);
 }
 
-if(purchase_carts($db, $carts) === false){
+$total_price = sum_carts($carts);
+
+if(purchase_carts($db, $carts,$user['user_id'],$total_price) === false){
   set_error('商品が購入できませんでした。');
   redirect_to(CART_URL);
 } 
 
-$total_price = sum_carts($carts);
+
+
 include_once '../view/finish_view.php';
