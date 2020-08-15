@@ -190,3 +190,11 @@ function is_valid_csrf_token($token){
 function get_hashed_string($password){
   return password_hash($password,PASSWORD_DEFAULT);
 }
+
+//小計を求める
+//@param int $purchase_price 購入時の金額
+//@param int $amount 購入数
+//@return int 小計
+function calclate_subtotal_price($purchase_price,$amount){
+  return number_format($purchase_price * $amount);
+}

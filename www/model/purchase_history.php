@@ -26,6 +26,8 @@ function get_purchase_historys($db){
       total_price
     FROM
       purchase_history
+    ORDER BY
+      created DESC
   ";
 
   return fetch_all_query($db,$sql);
@@ -44,9 +46,11 @@ function get_purchase_history($db,$user_id){
       purchase_history
     WHERE
       user_id = ?
+    ORDER BY
+      created DESC
   ";
 
-  return fetch_query($db,$sql,array($user_id));
+  return fetch_all_query($db,$sql,array($user_id));
 }
 
 /*最後にinsertされたレコードの、主キーの値を取得*/
