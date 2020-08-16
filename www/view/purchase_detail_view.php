@@ -37,7 +37,9 @@
                         <?php } ?>
                     </tbody>
                 </table>
-            <?php }?>
+            <?php } else{ ?>
+                <p>購入明細は存在しません。</p>
+            <?php } ?>
         </div>
         
     </body>
