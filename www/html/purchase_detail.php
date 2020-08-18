@@ -22,9 +22,12 @@ if(is_valid_csrf_token($_POST['token']) === false){
 
 $historys = get_purchase_history($db,$user['user_id']);
 
-if(is_my_history_id($historys,$_POST['history_id']) === false){
-    set_error('他のユーザーの購入明細は閲覧できません。');
-    redirect_to(HISTORY_URL);
+//ログイン中のユーザーが管理者でない場合
+if($user['type'] !== USER_TYPE_ADMIN){
+    if(is_my_history_id($historys,$_POST['history_id']) === false){
+        set_error('他のユーザーの購入明細は閲覧できません。');
+        redirect_to(HISTORY_URL);
+    }
 }
 
 $details = get_purchase_detail($db,$_POST['history_id']);

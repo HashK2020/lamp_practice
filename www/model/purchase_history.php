@@ -69,7 +69,7 @@ function get_last_insert_id($db){
 /*@return boolean 引数のhistory_idが現在ログイン中のユーザーのものかどうか*/
 function is_my_history_id($historys,$history_id){
   foreach($historys as $history){
-    if($history['history_id'] === $history_id){
+    if($history['history_id'] === intval($history_id)){
       return true;
     }
   }
