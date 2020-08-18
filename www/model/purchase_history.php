@@ -26,6 +26,8 @@ function get_purchase_historys($db){
       total_price
     FROM
       purchase_history
+    ORDER BY
+      created DESC
   ";
 
   return fetch_all_query($db,$sql);
@@ -44,9 +46,11 @@ function get_purchase_history($db,$user_id){
       purchase_history
     WHERE
       user_id = ?
+    ORDER BY
+      created DESC
   ";
 
-  return fetch_query($db,$sql,array($user_id));
+  return fetch_all_query($db,$sql,array($user_id));
 }
 
 /*最後にinsertされたレコードの、主キーの値を取得*/
@@ -57,6 +61,19 @@ function get_last_insert_id($db){
     ";
   
   return fetch_query($db,$sql);
+}
+
+/*ログイン中のユーザーの購入履歴かどうかを検証する*/
+/*@param array $historys ユーザーの購入履歴データ*/
+/*@param int $history_id 購入履歴ページから送られてきたhistory_id*/
+/*@return boolean 引数のhistory_idが現在ログイン中のユーザーのものかどうか*/
+function is_my_history_id($historys,$history_id){
+  foreach($historys as $history){
+    if($history['history_id'] === intval($history_id)){
+      return true;
+    }
+  }
+  return false;
 }
 
 ?>

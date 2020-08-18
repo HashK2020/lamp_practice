@@ -142,13 +142,14 @@ function purchase_carts($db, $carts, $user_id, $total_price){
       return false;
     }
   }
-
   delete_user_carts($db, $carts[0]['user_id']);
 
-  if(has_error()){
+  if(has_error() === false){
     $db->commit();
   }else{
     $db->rollback();
+    set_error('購入処理が成功しませんでした。');
+    return false;
   }
 
   return true;
