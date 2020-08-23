@@ -50,3 +50,7 @@ define('PERMITTED_IMAGE_TYPES', array(
   IMAGETYPE_JPEG => 'jpg',
   IMAGETYPE_PNG => 'png',
 ));
+
+define('ITEM_COUNT_PER_PAGE', 8);
+
+define('FIRST_PAGE',1);
