@@ -198,3 +198,14 @@ function get_hashed_string($password){
 function calclate_subtotal_price($purchase_price,$amount){
   return number_format($purchase_price * $amount);
 }
+
+//総ページ数を求める
+//@param int $total_item_count 商品の総数
+//@return int 総ページ数
+function calc_total_pages($total_item_count){
+  //総ページ数を計算する(計算時にfloat型になる)
+  $total_page_count = ceil(intval($total_item_count) / ITEM_COUNT_PER_PAGE);
+
+  //float型の$total_page_countをint型に変換
+  return intval($total_page_count);
+}

@@ -22,7 +22,7 @@ function get_item($db, $item_id){
   return fetch_query($db, $sql,array($item_id));
 }
 
-function get_items($db, $is_open = false){
+function get_items($db, $is_open = false, $offset = 0){
   $sql = '
     SELECT
       item_id, 
@@ -37,18 +37,38 @@ function get_items($db, $is_open = false){
   if($is_open === true){
     $sql .= '
       WHERE status = 1
+      LIMIT ?
+      OFFSET ?
     ';
-  }
 
-  return fetch_all_query($db, $sql);
+    return fetch_all_query($db, $sql,array(ITEM_COUNT_PER_PAGE,$offset));
+  }
+  else{
+    return fetch_all_query($db,$sql);
+  }
+  
+  
+}
+//商品の総数を求める
+function get_item_total_count($db){
+  $sql = '
+    SELECT
+      count(*) as total_count
+    FROM
+      items
+    WHERE
+      status = 1
+    ';
+    
+    return fetch_query($db,$sql);
 }
 
 function get_all_items($db){
   return get_items($db);
 }
 
-function get_open_items($db){
-  return get_items($db, true);
+function get_open_items($db,$offset = 0){
+  return get_items($db, true, $offset);
 }
 
 function regist_item($db, $name, $price, $stock, $status, $image){

@@ -13,7 +13,6 @@
   <div class="container">
     <h1>商品一覧</h1>
     <?php include VIEW_PATH . 'templates/messages.php'; ?>
-
     <div class="card-deck">
       <div class="row">
       <?php foreach($items as $item){ ?>
@@ -42,6 +41,45 @@
       <?php } ?>
       </div>
     </div>
+    <!--ページ番号のリンク-->
+    <div class="mt-5">
+      <ul class="pagination justify-content-center">
+        <!--「前へ」ボタン-->
+        <li class="page-item <?php if($current_page === FIRST_PAGE){ print('disabled'); }; ?>">
+          <form method="get">
+            <input type="submit" class="page-link" value="前へ">
+            <input type="hidden" name="page" value="<?php print($current_page - 1); ?>">
+          </form>
+        </li>
+        <!--ページ番号ボタン-->
+        <?php for($i=0;$i<$total_page_count;$i++){ ?>
+        <li class="page-item <?php if($i+1 === $current_page){ print('active'); }; ?>">
+            <form method="get">
+              <input type="submit" class="page-link" name="page" value="<?php print($i+1); ?>">
+            </form>
+        </li>
+        <?php } ?>
+        <!--「次へ」ボタン-->
+        <li class="page-item <?php if($current_page === $total_page_count){ print('disabled'); }; ?>">
+          <form method="get">
+            <input type="submit" class="page-link" value="次へ">
+            <input type="hidden" name="page" value="<?php print($current_page + 1); ?>">
+          </form>
+        </li>
+      </ul>
+    </div>
+    <p class="text-center">
+      <?php print(number_format($total_item_count['total_count'])); ?>件中 
+      <?php print(number_format(($current_page - 1) * ITEM_COUNT_PER_PAGE + 1)); ?> - 
+      <?php
+        if(($current_page * ITEM_COUNT_PER_PAGE) > $total_item_count['total_count']){
+          print(number_format($total_item_count['total_count']));
+        }
+        else{
+          print(number_format($current_page * ITEM_COUNT_PER_PAGE));
+        }
+      ?>件目の商品
+    </p>
   </div>
   
 </body>
