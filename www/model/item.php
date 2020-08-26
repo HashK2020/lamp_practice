@@ -56,6 +56,8 @@ function get_item_total_count($db){
       count(*) as total_count
     FROM
       items
+    WHERE
+      status = 1
     ';
     
     return fetch_query($db,$sql);
