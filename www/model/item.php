@@ -63,12 +63,98 @@ function get_item_total_count($db){
     return fetch_query($db,$sql);
 }
 
+//並べ替え済みの商品を取得
+/*@param object $db DBハンドル
+  @param int $sort_category_num ソート項目を分別する(1=新着順、2=価格の安い順、3=価格の高い順)
+  @param int $offset 何データ目からデータを取得するか
+  @return array 並べ替え済み商品データの一覧
+*/
+function get_sorted_items($db, $sort_category_num, $offset = 0){
+  $category_num = intval($sort_category_num);
+
+  //エラーチェック
+  //新着順・価格の安い順・価格の高い順以外が指定された場合
+  if($category_num < ORDER_LOWER_LIMIT || $category_num > ORDER_HIGHER_LIMIT){
+    set_error('不正な操作を検出しました。');
+    redirect_to(HOME_URL);
+  }
+  //SQL文の構築
+  $sql = '
+    SELECT
+      item_id,
+      name,
+      stock,
+      price,
+      image,
+      status
+    FROM
+      items
+    WHERE
+      status = 1
+  ';
+  //新着順でソートする場合
+  if($category_num === NEW_ARRIVALS_ORDER){
+    $sql .= '
+      ORDER BY created DESC
+    ';
+  }
+  //価格の安い順でソートする場合
+  else if($category_num === ORDER_LOW_PRICE){
+    $sql .= '
+      ORDER BY price ASC
+    ';
+  }
+  //価格の高い順でソートする場合
+  else if($category_num === ORDER_HIGH_PRICE){
+    $sql .= '
+      ORDER BY price DESC
+    ';
+  }
+  $sql .= '
+    LIMIT ?
+    OFFSET ?
+  ';
+
+  return fetch_all_query($db,$sql,array(ITEM_COUNT_PER_PAGE,$offset));
+}
+
 function get_all_items($db){
   return get_items($db);
 }
 
 function get_open_items($db,$offset = 0){
   return get_items($db, true, $offset);
+}
+
+//商品の並べ替えを行う関数
+function sort_items($db, $category_num, $offset = 0){
+  /*$category_numについて
+    1 = 新着順でソートする
+    2 = 価格の安い順でソートする
+    3 = 価格の高い順でソートする*/
+  //新着順でソートするの場合
+  if($category_num === 1){
+    $sorting_column_name = 'created';
+    $ascending_order_flag = false;
+  }
+  //価格の安い順でソートする場合
+  else if($category_num === 2){
+    $sorting_column_name = 'price';
+    $ascending_order_flag = true;
+  }
+  //価格の高い順でソートする場合
+  else if($category_num === 3){
+    $sorting_column_name = 'price';
+    $ascending_order_flag = false;
+  }
+  else{
+    set_error('不正な操作を検出しました。');
+    redirect_to(HOME_URL);
+  }
+  
+  
+
+  return get_sorted_items($db,$sorting_column_name,$ascending_order_flag,$offset);
 }
 
 function regist_item($db, $name, $price, $stock, $status, $image){

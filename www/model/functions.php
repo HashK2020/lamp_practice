@@ -209,3 +209,18 @@ function calc_total_pages($total_item_count){
   //float型の$total_page_countをint型に変換
   return intval($total_page_count);
 }
+
+//SQLのLIMIT句で使用するoffsetの値を計算する
+/*@param int $current_page 現在のページ
+  @return int offsetの値*/
+function calc_offset($current_page){
+  $offset = ($current_page - 1) * ITEM_COUNT_PER_PAGE;
+  return $offset;
+}
+
+//
+function print_selected($option_value,$category_num){
+  if($option_value === $category_num){
+    print("selected");
+  }
+}
