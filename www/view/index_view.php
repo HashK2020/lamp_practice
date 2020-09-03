@@ -12,6 +12,16 @@
 
   <div class="container">
     <h1>商品一覧</h1>
+    <div class="sort text-right">
+      <form method="get" id="sort_form">
+        <select name="sort" id="sort">
+          <option value="1" <?php print_selected(NEW_ARRIVALS_ORDER,$category_num); ?>>新着順</option>
+          <option value="2" <?php print_selected(ORDER_LOW_PRICE,$category_num); ?>>価格の安い順</option>
+          <option value="3" <?php print_selected(ORDER_HIGH_PRICE,$category_num); ?>>価格の高い順</option>
+        </select>
+        <input id="submit-sort" type="submit" value="並べ替え">
+      </form>
+    </div>
     <?php include VIEW_PATH . 'templates/messages.php'; ?>
     <div class="card-deck">
       <div class="row">
@@ -42,45 +52,56 @@
       </div>
     </div>
     <!--ページ番号のリンク-->
-    <div class="mt-5">
-      <ul class="pagination justify-content-center">
-        <!--「前へ」ボタン-->
-        <li class="page-item <?php if($current_page === FIRST_PAGE){ print('disabled'); }; ?>">
-          <form method="get">
-            <input type="submit" class="page-link" value="前へ">
-            <input type="hidden" name="page" value="<?php print($current_page - 1); ?>">
-          </form>
-        </li>
-        <!--ページ番号ボタン-->
-        <?php for($i=0;$i<$total_page_count;$i++){ ?>
-        <li class="page-item <?php if($i+1 === $current_page){ print('active'); }; ?>">
+    <?php if($items !== false){?>
+      <div class="mt-5">
+        <ul class="pagination justify-content-center">
+          <!--「前へ」ボタン-->
+          <li class="page-item <?php if($current_page === FIRST_PAGE){ print('disabled'); }; ?>">
             <form method="get">
-              <input type="submit" class="page-link" name="page" value="<?php print($i+1); ?>">
+              <input type="submit" class="page-link" value="前へ">
+              <input type="hidden" name="page" value="<?php print($current_page - 1); ?>">
+              <?php if(isset($category_num) === true){ ?>
+                <input type="hidden" name="category_num" value="<?php print($category_num); ?>">
+              <?php } ?>
             </form>
-        </li>
-        <?php } ?>
-        <!--「次へ」ボタン-->
-        <li class="page-item <?php if($current_page === $total_page_count){ print('disabled'); }; ?>">
-          <form method="get">
-            <input type="submit" class="page-link" value="次へ">
-            <input type="hidden" name="page" value="<?php print($current_page + 1); ?>">
-          </form>
-        </li>
-      </ul>
-    </div>
-    <p class="text-center">
-      <?php print(number_format($total_item_count['total_count'])); ?>件中 
-      <?php print(number_format(($current_page - 1) * ITEM_COUNT_PER_PAGE + 1)); ?> - 
-      <?php
-        if(($current_page * ITEM_COUNT_PER_PAGE) > $total_item_count['total_count']){
-          print(number_format($total_item_count['total_count']));
-        }
-        else{
-          print(number_format($current_page * ITEM_COUNT_PER_PAGE));
-        }
-      ?>件目の商品
-    </p>
+          </li>
+          <!--ページ番号ボタン-->
+          <?php for($i=0;$i<$total_page_count;$i++){ ?>
+          <li class="page-item <?php if($i+1 === $current_page){ print('active'); }; ?>">
+              <form method="get">
+                <input type="submit" class="page-link" name="page" value="<?php print($i+1); ?>">
+                <?php if(isset($category_num) === true){ ?>
+                  <input type="hidden" name="category_num" value="<?php print($category_num); ?>">
+                <?php } ?>
+              </form>
+          </li>
+          <?php } ?>
+          <!--「次へ」ボタン-->
+          <li class="page-item <?php if($current_page === $total_page_count){ print('disabled'); }; ?>">
+            <form method="get">
+              <input type="submit" class="page-link" value="次へ">
+              <input type="hidden" name="page" value="<?php print($current_page + 1); ?>">
+              <?php if(isset($category_num) === true){ ?>
+                <input type="hidden" name="category_num" value="<?php print($category_num); ?>">
+              <?php } ?>
+            </form>
+          </li>
+        </ul>
+      </div>
+      <p class="text-center">
+        <?php print(number_format($total_item_count['total_count'])); ?>件中 
+        <?php print(number_format(($current_page - 1) * ITEM_COUNT_PER_PAGE + 1)); ?> - 
+        <?php
+          if(($current_page * ITEM_COUNT_PER_PAGE) > $total_item_count['total_count']){
+            print(number_format($total_item_count['total_count']));
+          }
+          else{
+            print(number_format($current_page * ITEM_COUNT_PER_PAGE));
+          }
+        ?>件目の商品
+      </p>
+    <?php }; ?>
   </div>
-  
 </body>
+<script type="text/javascript" src="../assets/javascript/sort.js"></script>
 </html>

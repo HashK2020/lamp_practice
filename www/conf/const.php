@@ -6,6 +6,7 @@ define('VIEW_PATH', $_SERVER['DOCUMENT_ROOT'] . '/../view/');
 
 define('IMAGE_PATH', '/assets/images/');
 define('STYLESHEET_PATH', '/assets/css/');
+define('JAVASCRIPT_PATH', '/assets/javascript');
 define('IMAGE_DIR', $_SERVER['DOCUMENT_ROOT'] . '/assets/images/' );
 
 define('DB_HOST', 'mysql');
@@ -54,3 +55,10 @@ define('PERMITTED_IMAGE_TYPES', array(
 define('ITEM_COUNT_PER_PAGE', 8);
 
 define('FIRST_PAGE',1);
+
+define('NEW_ARRIVALS_ORDER', 1);
+define('ORDER_LOW_PRICE', 2);
+define('ORDER_HIGH_PRICE', 3);
+
+define('ORDER_LOWER_LIMIT', 1);
+define('ORDER_HIGHER_LIMIT', 3);

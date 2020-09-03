@@ -19,19 +19,33 @@ $total_page_count = calc_total_pages($total_item_count['total_count']);
 
 //GETでページ番号が送られてきた場合
 if(isset($_GET['page']) === true){
-    $current_page = intval($_GET['page']);
-    //GETで不正な数字が送られてきていないか確認
-    if($current_page < 1 || $current_page > $total_page_count){
-      set_error("存在しないページを参照しようとしました。");
-      redirect_to(HOME_URL);
-    }
-    //SQLのLIMIT句で使用するoffsetの値を計算する
-    $offset = ($current_page - 1) * ITEM_COUNT_PER_PAGE;
-    $items = get_open_items($db,$offset);
+  $current_page = intval($_GET['page']);
+  //GETで不正な数字が送られてきていないか確認
+  if($current_page < 1 || $current_page > $total_page_count){
+    set_error("存在しないページを参照しようとしました。");
+    redirect_to(HOME_URL);
+  }
+  //SQLのLIMIT句で使用するoffsetの値を計算する
+  $offset = calc_offset($current_page);
+  if(isset($_GET['category_num']) === true){
+    $category_num = intval($_GET['category_num']);
+    //以前ソートしたときに使用した変数($category_num)を利用して情報を取得する
+    $items = get_sorted_items($db,$category_num,$offset);
+  }
+}
+//ソート順を変更した場合
+else if(isset($_GET['sort']) === true){
+  $category_num = intval($_GET['sort']);
+  //強制的に最初のページに戻す
+  $current_page = 1;
+  $offset = calc_offset($current_page);
+  $items = get_sorted_items($db,$category_num,$offset);
 }
 else{
   //初回読み込み時の処理
-  $items = get_open_items($db);
+  //初回は新着順でデータを取得する
+  $items = get_sorted_items($db,NEW_ARRIVALS_ORDER);
+  $category_num = NEW_ARRIVALS_ORDER;
   $current_page = 1;
 }
 
