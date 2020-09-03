@@ -27,16 +27,13 @@ if(isset($_GET['page']) === true){
   }
   //SQLのLIMIT句で使用するoffsetの値を計算する
   $offset = calc_offset($current_page);
-  //すでにソートされてるなら
   if(isset($_GET['category_num']) === true){
-    $category_num = $_GET['category_num'];
+    $category_num = intval($_GET['category_num']);
     //以前ソートしたときに使用した変数($category_num)を利用して情報を取得する
     $items = get_sorted_items($db,$category_num,$offset);
   }
-  else{
-    $items = get_open_items($db,$offset);
-  }
 }
+//ソート順を変更した場合
 else if(isset($_GET['sort']) === true){
   $category_num = intval($_GET['sort']);
   //強制的に最初のページに戻す
@@ -46,7 +43,9 @@ else if(isset($_GET['sort']) === true){
 }
 else{
   //初回読み込み時の処理
-  $items = get_open_items($db);
+  //初回は新着順でデータを取得する
+  $items = get_sorted_items($db,NEW_ARRIVALS_ORDER);
+  $category_num = NEW_ARRIVALS_ORDER;
   $current_page = 1;
 }
 
